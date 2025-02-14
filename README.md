@@ -1,4 +1,4 @@
-# Daily Book of Mormon API
+# Daily Book of Mormon API ([Hosted at christianfurr.dev](https://bom.christianfurr.dev/))
 
 A simple and efficient API for accessing Book of Mormon verses, providing daily verses, random verses, and specific verse lookups.
 
