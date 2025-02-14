@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 app.use(cors());
@@ -112,6 +113,25 @@ app.get('/books', (req, res) => {
     res.status(500).json({ error: 'Error getting books' });
   }
 });
+
+// Create a limiter for general routes
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+
+// Create a stricter limiter for specific routes
+const strictLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 50 // limit each IP to 50 requests per windowMs
+});
+
+// Apply general rate limiting to all routes
+app.use(generalLimiter);
+
+// Apply stricter rate limiting to specific routes
+app.use('/random', strictLimiter);
+app.use('/daily', strictLimiter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
